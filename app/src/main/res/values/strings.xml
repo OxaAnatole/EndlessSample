@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Endless Sample</string>
+    <string name="lbl_backend">Backend address</string>
+</resources>
