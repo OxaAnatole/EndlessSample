@@ -8,12 +8,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
-import android.text.TextUtils
 import androidx.core.app.NotificationCompat
 import com.ivanbakach.endlesssample.MainActivity
 import com.ivanbakach.endlesssample.R
-import com.ivanbakach.endlesssample.api.RetrofitFactory.apiService
-import com.ivanbakach.endlesssample.device.DeviceUtil.generateDeviceInfo
 import com.ivanbakach.endlesssample.repository.DeviceRepository
 import java.util.concurrent.TimeUnit
 
