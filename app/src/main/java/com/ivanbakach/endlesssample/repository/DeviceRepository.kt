@@ -9,7 +9,6 @@ import com.ivanbakach.endlesssample.endless.ErrorReceiver
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-
 class DeviceRepository {
     private val TAG = "DeviceRepository"
     private var parentJob = Job()
@@ -24,7 +23,9 @@ class DeviceRepository {
                 RetrofitFactory.apiService().sendDeviceData(it).execute()
             } catch (e: Exception) {
                 Log.w(TAG, "Sending is failed", e)
-                context.sendBroadcast(Intent(context, ErrorReceiver::class.java))
+                val intent = Intent(context, ErrorReceiver::class.java)
+                intent.putExtra(ErrorReceiver.MESSAGE_KEY, e.message)
+                context.sendBroadcast(intent)
             }
         }
     }

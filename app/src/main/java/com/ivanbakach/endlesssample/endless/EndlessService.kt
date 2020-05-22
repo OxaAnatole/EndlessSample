@@ -33,7 +33,7 @@ class EndlessService : Service() {
         handler.removeCallbacks(runnableCode)
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground()
         return START_STICKY
     }
