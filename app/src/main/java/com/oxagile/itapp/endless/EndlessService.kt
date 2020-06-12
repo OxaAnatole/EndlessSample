@@ -1,4 +1,4 @@
-package com.ivanbakach.endlesssample.endless
+package com.oxagile.itapp.endless
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,9 +9,9 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import com.ivanbakach.endlesssample.MainActivity
-import com.ivanbakach.endlesssample.R
-import com.ivanbakach.endlesssample.repository.DeviceRepository
+import com.oxagile.itapp.MainActivity
+import com.oxagile.itapp.R
+import com.oxagile.itapp.repository.DeviceRepository
 import java.util.concurrent.TimeUnit
 
 class EndlessService : Service() {

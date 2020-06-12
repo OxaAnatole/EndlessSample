@@ -1,11 +1,9 @@
-package com.ivanbakach.endlesssample.device
+package com.oxagile.itapp.device
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
-import com.jaredrummler.android.device.DeviceName
-import java.lang.Exception
 
 
 object DeviceUtil {

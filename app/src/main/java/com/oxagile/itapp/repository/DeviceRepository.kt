@@ -1,11 +1,11 @@
-package com.ivanbakach.endlesssample.repository
+package com.oxagile.itapp.repository
 
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.ivanbakach.endlesssample.api.RetrofitFactory
-import com.ivanbakach.endlesssample.device.DeviceUtil
-import com.ivanbakach.endlesssample.endless.ErrorReceiver
+import com.oxagile.itapp.api.RetrofitFactory
+import com.oxagile.itapp.device.DeviceUtil
+import com.oxagile.itapp.endless.ErrorReceiver
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 

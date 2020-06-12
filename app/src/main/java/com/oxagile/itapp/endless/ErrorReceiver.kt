@@ -1,4 +1,4 @@
-package com.ivanbakach.endlesssample.endless
+package com.oxagile.itapp.endless
 
 import android.content.BroadcastReceiver
 import android.content.Context

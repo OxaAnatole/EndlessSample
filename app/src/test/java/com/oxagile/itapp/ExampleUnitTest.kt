@@ -1,4 +1,4 @@
-package com.ivanbakach.endlesssample
+package com.oxagile.itapp
 
 import org.junit.Test
 

@@ -1,13 +1,13 @@
-package com.ivanbakach.endlesssample
+package com.oxagile.itapp
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.ivanbakach.endlesssample.api.RetrofitFactory
-import com.ivanbakach.endlesssample.device.DeviceUtil
-import com.ivanbakach.endlesssample.endless.EndlessService
+import com.oxagile.itapp.api.RetrofitFactory
+import com.oxagile.itapp.device.DeviceUtil
+import com.oxagile.itapp.endless.EndlessService
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

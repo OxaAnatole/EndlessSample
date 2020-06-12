@@ -1,4 +1,4 @@
-package com.ivanbakach.endlesssample.api
+package com.oxagile.itapp.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

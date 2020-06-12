@@ -1,4 +1,4 @@
-package com.ivanbakach.endlesssample.device
+package com.oxagile.itapp.device
 
 
 data class Device(

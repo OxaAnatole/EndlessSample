@@ -1,6 +1,6 @@
-package com.ivanbakach.endlesssample.api
+package com.oxagile.itapp.api
 
-import com.ivanbakach.endlesssample.device.Device
+import com.oxagile.itapp.device.Device
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
