@@ -1,9 +1,8 @@
 package com.oxagile.itapp
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -26,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         DeviceUtil.generateDeviceInfo(this) {
             device_info.text = it.toString()
         }
+
+        version_code.text = "Version code: ${BuildConfig.VERSION_CODE}"
 
         start.setOnClickListener {
             startService(Intent(this, EndlessService::class.java))
@@ -55,11 +56,16 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Was added $apiUrl", Toast.LENGTH_SHORT).show()
         }
         button_update.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val dir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                viewModel.update(applicationContext, application.packageName, "$dir/app-debug.apk")
+            try {
+                viewModel.update(applicationContext, application.packageName, "/data/local/tmp/app-debug.apk")
+            } catch (e: Exception) {
+                Log.e(TAG, "Cannot update the app", e)
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 
 }
