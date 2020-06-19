@@ -1,3 +1,7 @@
+# Oxagile IT app for Android
+
+The flipper tool was added in the app for debugging. More info: https://fbflipper.com/
+
 # Silent Android App Update
 
 The app can be updated silently without user confirmation with a device owner app. 

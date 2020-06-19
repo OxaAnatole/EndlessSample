@@ -1,10 +1,11 @@
 package com.oxagile.itapp.api
 
+import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
+import com.oxagile.itapp.ItApp.Companion.networkFlipperPlugin
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 object RetrofitFactory {
 
@@ -16,6 +17,7 @@ object RetrofitFactory {
 
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addNetworkInterceptor(FlipperOkhttpInterceptor(networkFlipperPlugin))
             .build()
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
