@@ -1,17 +1,21 @@
 package com.oxagile.itapp.endless
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
+import android.app.admin.DevicePolicyManager
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.oxagile.itapp.MainActivity
 import com.oxagile.itapp.R
+import com.oxagile.itapp.receiver.DownloadCompleteReceiver
 import com.oxagile.itapp.repository.DeviceRepository
+import com.oxagile.itapp.utils.UpdateUtils
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 class EndlessService : Service() {
@@ -23,6 +27,7 @@ class EndlessService : Service() {
             handler.postDelayed(this, TimeUnit.MINUTES.toMillis(1L))
         }
     }
+    private lateinit var updateHelper: UpdateHelper
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -30,10 +35,13 @@ class EndlessService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        updateHelper.stop()
         handler.removeCallbacks(runnableCode)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        updateHelper = UpdateHelper(applicationContext)
+        updateHelper.start()
         startForeground()
         return START_STICKY
     }
@@ -76,6 +84,58 @@ class EndlessService : Service() {
 
     private fun repeatableAction() {
         DeviceRepository().sendRepository(this)
+    }
+
+    private class UpdateHelper(private val context: Context) {
+
+        private val file: File = File(context.getExternalFilesDir(null)!!, "app.apk")
+        private val period = TimeUnit.MINUTES.toMillis(10) //TODO
+        private val receiver = DownloadCompleteReceiver { update() }
+        private val handler = Handler()
+        private val runnable = object : Runnable {
+            override fun run() {
+                if (isNewVersion()) {
+                    if (file.exists()) {
+                        file.delete()
+                    }
+                    receiver.downloadId = UpdateUtils.download(context, file, URL)
+                }
+                handler.postDelayed(this, period)
+            }
+        }
+
+        private fun isNewVersion(): Boolean {
+            //TODO
+            return true
+        }
+
+        private fun update() {
+            try {
+                val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+                if (dpm.isDeviceOwnerApp(context.packageName)) {
+                    Log.d(TAG, "The app is device owner")
+                    UpdateUtils.update(context, context.packageName, file.path)
+                } else Log.d(TAG, "The app is not device owner")
+            } catch (e: Exception) {
+                Log.e(TAG, "Cannot update the app", e)
+            }
+        }
+
+        fun start() {
+            context.registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+            handler.post(runnable)
+        }
+
+        fun stop() {
+            context.unregisterReceiver(receiver)
+            handler.removeCallbacks(runnable)
+        }
+
+        companion object {
+            private const val TAG = "UpdateHelper"
+            private const val URL = "http://speedtest.ftp.otenet.gr/files/test10Mb.db" //TODO
+        }
+
     }
 
     companion object {
