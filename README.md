@@ -15,6 +15,7 @@ adb install -r -t app.apk
 ```
 <br>
 Where "app.apk" is name of APK-file of the app.
+<br>
 
 2. Set app as device owner (Important condition: on device must have no any account).
 ```shell
@@ -30,10 +31,10 @@ Where "app.apk" is name of APK-file of the app.
 
 4. Push the new APK with updated versionCode to the device (this step for testing of app updating).
 ```
-adb push app-update.apk /data/local/tmp
+adb push app.apk /storage/emulated/0/Android/data/com.oxagile.itapp/files/
 ```
 <br>
-Where "app-update.apk" is name of APK-file of the app with new version of code.
-
+Where "app.apk" is name of APK-file of the app with new version of code.
+<br>
 
 
