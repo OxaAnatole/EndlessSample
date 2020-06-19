@@ -133,7 +133,7 @@ class EndlessService : Service() {
 
         companion object {
             private const val TAG = "UpdateHelper"
-            private const val URL = "http://speedtest.ftp.otenet.gr/files/test10Mb.db" //TODO
+            private const val URL = "https://drive.google.com/u/0/uc?id=1xd5hoOfNGaIkNLgrmm3g2EclGzGwMbTb&export=download" //TODO
         }
 
     }

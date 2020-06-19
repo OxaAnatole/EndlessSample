@@ -13,9 +13,7 @@ https://sisik.eu/blog/android/dev-admin/update-app
 ```
 adb install -r -t app.apk
 ```
-<br>
-Where "app.apk" is name of APK-file of the app.
-<br>
+Where "app.apk" is name of APK-file of the app.<br>
 
 2. Set app as device owner (Important condition: on device must have no any account).
 ```shell
