@@ -1,4 +1,4 @@
-package com.oxagile.itapp.device
+package com.oxagile.itapp.model
 
 
 data class Device(

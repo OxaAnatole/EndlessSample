@@ -1,9 +1,10 @@
-package com.oxagile.itapp.device
+package com.oxagile.itapp.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
+import com.oxagile.itapp.model.Device
 
 
 object DeviceUtil {

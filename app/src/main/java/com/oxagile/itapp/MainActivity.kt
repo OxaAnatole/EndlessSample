@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.oxagile.itapp.api.RetrofitFactory
-import com.oxagile.itapp.device.DeviceUtil
+import com.oxagile.itapp.utils.DeviceUtil
 import com.oxagile.itapp.endless.EndlessService
 import kotlinx.android.synthetic.main.activity_main.*
 

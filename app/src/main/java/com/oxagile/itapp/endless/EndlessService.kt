@@ -13,13 +13,17 @@ import androidx.core.app.NotificationCompat
 import com.oxagile.itapp.MainActivity
 import com.oxagile.itapp.R
 import com.oxagile.itapp.receiver.DownloadCompleteReceiver
-import com.oxagile.itapp.repository.DeviceRepository
+import com.oxagile.itapp.repository.Repository
 import com.oxagile.itapp.utils.UpdateUtils
+import com.oxagile.itapp.api.Result
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.TimeUnit
 
 class EndlessService : Service() {
 
+    private val repository = Repository()
     private val handler = Handler()
     private val runnableCode: Runnable = object : Runnable {
         override fun run() {
@@ -40,7 +44,7 @@ class EndlessService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        updateHelper = UpdateHelper(applicationContext)
+        updateHelper = UpdateHelper(applicationContext, repository)
         updateHelper.start()
         startForeground()
         return START_STICKY
@@ -83,18 +87,22 @@ class EndlessService : Service() {
     }
 
     private fun repeatableAction() {
-        DeviceRepository().sendRepository(this)
+        repository.sendDeviceInfo(this)
     }
 
-    private class UpdateHelper(private val context: Context) {
+    private class UpdateHelper(
+        private val context: Context,
+        private val repository: Repository
+    ) {
 
+        private val scope = repository.scope
         private val file: File = File(context.getExternalFilesDir(null)!!, "app.apk")
         private val period = TimeUnit.MINUTES.toMillis(10) //TODO
         private val receiver = DownloadCompleteReceiver { update() }
         private val handler = Handler()
         private val runnable = object : Runnable {
             override fun run() {
-                if (isNewVersion()) {
+                requireUpdate() {
                     if (file.exists()) {
                         file.delete()
                     }
@@ -104,9 +112,17 @@ class EndlessService : Service() {
             }
         }
 
-        private fun isNewVersion(): Boolean {
-            //TODO
-            return true
+        private inline fun requireUpdate(crossinline update: () -> Unit) = scope.launch(Dispatchers.IO) {
+            when (val result = repository.requireUpdate()) {
+                is Result.Success -> {
+                    if (result.data) {
+                        update()
+                    }
+                }
+                is Result.Error -> {
+                    Log.e(TAG, "requireUpdate", result.exception)
+                }
+            }
         }
 
         private fun update() {
@@ -133,7 +149,7 @@ class EndlessService : Service() {
 
         companion object {
             private const val TAG = "UpdateHelper"
-            private const val URL = "https://drive.google.com/u/0/uc?id=1xd5hoOfNGaIkNLgrmm3g2EclGzGwMbTb&export=download" //TODO
+            private const val URL = "" //TODO
         }
 
     }
