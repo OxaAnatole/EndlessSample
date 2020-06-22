@@ -10,7 +10,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.oxagile.itapp.MainActivity
+import com.oxagile.itapp.ui.activity.MainActivity
 import com.oxagile.itapp.R
 import com.oxagile.itapp.receiver.DownloadCompleteReceiver
 import com.oxagile.itapp.repository.Repository
