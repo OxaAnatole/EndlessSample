@@ -2,15 +2,23 @@ package com.oxagile.itapp.ui.activity
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.oxagile.itapp.R
 import com.oxagile.itapp.ui.fragment.LoginFragment
 import com.oxagile.itapp.ui.fragment.MainFragment
-
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), LoginFragment.LoginActionListener {
+
+    private val handler = Handler()
+    private val runnable = Runnable {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.main_container, LoginFragment(), LoginFragment.TAG)
+            .commit()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,14 +28,20 @@ class MainActivity : AppCompatActivity(), LoginFragment.LoginActionListener {
                 .add(R.id.main_container, MainFragment(), MainFragment.TAG)
                 .commit()
         }
+        if (supportFragmentManager.findFragmentByTag(LoginFragment.TAG) == null) {
+            runnable.run()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        handler.removeCallbacks(runnable)
     }
 
     override fun onResume() {
         super.onResume()
         if (supportFragmentManager.findFragmentByTag(LoginFragment.TAG) == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.main_container, LoginFragment(), LoginFragment.TAG)
-                .commit()
+            handler.postDelayed(runnable, TimeUnit.SECONDS.toMillis(30))
         }
     }
 
