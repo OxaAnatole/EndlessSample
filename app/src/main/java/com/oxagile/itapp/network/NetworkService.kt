@@ -1,4 +1,4 @@
-package com.oxagile.itapp.api
+package com.oxagile.itapp.network
 
 import com.oxagile.itapp.model.Device
 import com.oxagile.itapp.model.PasswordRequest

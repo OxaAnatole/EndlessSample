@@ -3,15 +3,13 @@ package com.oxagile.itapp.repository
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.oxagile.itapp.api.RetrofitFactory
+import com.oxagile.itapp.network.NetworkFactory
 import com.oxagile.itapp.utils.DeviceUtil
 import com.oxagile.itapp.endless.ErrorReceiver
-import com.oxagile.itapp.model.DevicePassword
-import com.oxagile.itapp.model.PasswordRequest
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.suspendCoroutine
-import com.oxagile.itapp.api.Result
+import com.oxagile.itapp.network.Result
 import java.lang.IllegalStateException
 import kotlin.coroutines.resume
 
@@ -26,7 +24,7 @@ class Repository {
     fun sendDeviceInfo(context: Context) = scope.launch(Dispatchers.IO) {
         DeviceUtil.generateDeviceInfo(context) {
             try {
-                RetrofitFactory.apiService().sendDeviceData(it).execute()
+                NetworkFactory.apiService().sendDeviceData(it).execute()
             } catch (e: Exception) {
                 Log.w(TAG, "Sending is failed", e)
                 val intent = Intent(context, ErrorReceiver::class.java)

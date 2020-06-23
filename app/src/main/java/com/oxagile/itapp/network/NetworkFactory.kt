@@ -1,4 +1,4 @@
-package com.oxagile.itapp.api
+package com.oxagile.itapp.network
 
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.oxagile.itapp.ItApp.Companion.networkFlipperPlugin
@@ -7,8 +7,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitFactory {
+object NetworkFactory {
 
+    const val INSTALLING_FILE = "app.apk"
     var BASE_URL = "http://192.168.31.231:3001/"
 
     fun apiService(): NetworkService {
@@ -27,4 +28,7 @@ object RetrofitFactory {
 
         return retrofit.create(NetworkService::class.java)
     }
+
+    fun getDownloadingUrl() = "${BASE_URL}app/${INSTALLING_FILE}"
+
 }

@@ -15,7 +15,8 @@ import com.oxagile.itapp.R
 import com.oxagile.itapp.receiver.DownloadCompleteReceiver
 import com.oxagile.itapp.repository.Repository
 import com.oxagile.itapp.utils.UpdateUtils
-import com.oxagile.itapp.api.Result
+import com.oxagile.itapp.network.Result
+import com.oxagile.itapp.network.NetworkFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -96,7 +97,7 @@ class EndlessService : Service() {
     ) {
 
         private val scope = repository.scope
-        private val file: File = File(context.getExternalFilesDir(null)!!, "app.apk")
+        private val file: File = File(context.getExternalFilesDir(null)!!, NetworkFactory.INSTALLING_FILE)
         private val period = TimeUnit.MINUTES.toMillis(10) //TODO
         private val receiver = DownloadCompleteReceiver { update() }
         private val handler = Handler()
@@ -106,17 +107,17 @@ class EndlessService : Service() {
                     if (file.exists()) {
                         file.delete()
                     }
-                    receiver.downloadId = UpdateUtils.download(context, file, URL)
+                    receiver.downloadId = UpdateUtils.download(context, file, NetworkFactory.getDownloadingUrl())
                 }
                 handler.postDelayed(this, period)
             }
         }
 
-        private inline fun requireUpdate(crossinline update: () -> Unit) = scope.launch(Dispatchers.IO) {
+        private inline fun requireUpdate(crossinline updateBlock: () -> Unit) = scope.launch(Dispatchers.IO) {
             when (val result = repository.requireUpdate()) {
                 is Result.Success -> {
                     if (result.data) {
-                        update()
+                        updateBlock()
                     }
                 }
                 is Result.Error -> {
@@ -149,7 +150,6 @@ class EndlessService : Service() {
 
         companion object {
             private const val TAG = "UpdateHelper"
-            private const val URL = "" //TODO
         }
 
     }

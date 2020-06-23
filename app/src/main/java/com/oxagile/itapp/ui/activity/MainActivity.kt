@@ -13,11 +13,13 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), LoginFragment.LoginActionListener {
 
+    private var entered = false
     private val handler = Handler()
     private val runnable = Runnable {
         supportFragmentManager.beginTransaction()
             .add(R.id.main_container, LoginFragment(), LoginFragment.TAG)
-            .commit()
+            .commitAllowingStateLoss()
+        entered = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +30,10 @@ class MainActivity : AppCompatActivity(), LoginFragment.LoginActionListener {
                 .add(R.id.main_container, MainFragment(), MainFragment.TAG)
                 .commit()
         }
-        if (supportFragmentManager.findFragmentByTag(LoginFragment.TAG) == null) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(ENTERED_KEY)) {
+            entered = savedInstanceState.getBoolean(ENTERED_KEY)
+        }
+        if (!entered && supportFragmentManager.findFragmentByTag(LoginFragment.TAG) == null) {
             runnable.run()
         }
     }
@@ -38,11 +43,16 @@ class MainActivity : AppCompatActivity(), LoginFragment.LoginActionListener {
         handler.removeCallbacks(runnable)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStop() {
+        super.onStop()
         if (supportFragmentManager.findFragmentByTag(LoginFragment.TAG) == null) {
             handler.postDelayed(runnable, TimeUnit.SECONDS.toMillis(30))
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(ENTERED_KEY, entered)
     }
 
     override fun onEnter() {
@@ -52,6 +62,7 @@ class MainActivity : AppCompatActivity(), LoginFragment.LoginActionListener {
                 .remove(it)
                 .commit()
             hideKeyboard()
+            entered = true
         }
     }
 
@@ -62,6 +73,10 @@ class MainActivity : AppCompatActivity(), LoginFragment.LoginActionListener {
             view = this as View
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    companion object {
+        private const val ENTERED_KEY = "entered"
     }
 
 }

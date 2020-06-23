@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.oxagile.itapp.BuildConfig
 import com.oxagile.itapp.R
-import com.oxagile.itapp.api.RetrofitFactory
+import com.oxagile.itapp.network.NetworkFactory
 import com.oxagile.itapp.endless.EndlessService
 import com.oxagile.itapp.utils.DeviceUtil
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -52,10 +52,10 @@ class MainFragment : Fragment() {
             arrayAdapter
         )
 
-        api_input.setText(RetrofitFactory.BASE_URL)
+        api_input.setText(NetworkFactory.BASE_URL)
         api_change.setOnClickListener {
             val apiUrl = api_input.text
-            RetrofitFactory.BASE_URL = apiUrl.toString()
+            NetworkFactory.BASE_URL = apiUrl.toString()
             Toast.makeText(context, "Api URL was changed to $apiUrl", Toast.LENGTH_SHORT).show()
         }
         api_add.setOnClickListener {
