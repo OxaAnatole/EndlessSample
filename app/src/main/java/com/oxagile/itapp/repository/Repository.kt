@@ -6,6 +6,8 @@ import android.util.Log
 import com.oxagile.itapp.network.NetworkFactory
 import com.oxagile.itapp.utils.DeviceUtil
 import com.oxagile.itapp.endless.ErrorReceiver
+import com.oxagile.itapp.model.DevicePassword
+import com.oxagile.itapp.model.PasswordRequest
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.suspendCoroutine
@@ -37,7 +39,7 @@ class Repository {
     suspend fun checkPassword(password: String): Result<Boolean> {
         return try {
             val request = PasswordRequest(DevicePassword(password))
-            val answer = RetrofitFactory.apiService().checkPassword(request)
+            val answer = NetworkFactory.apiService().checkPassword(request)
             processAnswer(answer)
         } catch (e: Exception) {
             Result.Error(e)
@@ -46,7 +48,7 @@ class Repository {
 
     suspend fun requireUpdate(): Result<Boolean> {
         return try {
-            val answer = RetrofitFactory.apiService().requireUpdate()
+            val answer = NetworkFactory.apiService().requireUpdate()
             processAnswer(answer)
         } catch(e: Exception) {
             Result.Error(e)

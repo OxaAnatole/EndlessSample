@@ -2,6 +2,8 @@ package com.oxagile.itapp.network
 
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.oxagile.itapp.ItApp.Companion.networkFlipperPlugin
+import com.oxagile.itapp.ui.fragment.PREFS_URL_KEY
+import com.pixplicity.easyprefs.library.Prefs
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,7 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object NetworkFactory {
 
     const val INSTALLING_FILE = "app.apk"
-    var BASE_URL = "http://192.168.31.231:3001/"
+    val BASE_URL: String
+        get() = Prefs.getString(PREFS_URL_KEY, "http://192.168.31.231:3001/")
 
     fun apiService(): NetworkService {
         val loggingInterceptor = HttpLoggingInterceptor()

@@ -1,6 +1,7 @@
 package com.oxagile.itapp
 
 import android.app.Application
+import android.content.ContextWrapper
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.android.utils.FlipperUtils
 import com.facebook.flipper.core.FlipperClient
@@ -9,11 +10,18 @@ import com.facebook.flipper.plugins.inspector.DescriptorMapping
 import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.facebook.soloader.SoLoader
+import com.pixplicity.easyprefs.library.Prefs
 
 class ItApp: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Prefs.Builder()
+            .setContext(this)
+            .setMode(ContextWrapper.MODE_PRIVATE)
+            .setPrefsName(packageName)
+            .setUseDefaultSharedPreference(true)
+            .build()
         SoLoader.init(this, false)
         if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(this)) {
             val client: FlipperClient = AndroidFlipperClient.getInstance(this)

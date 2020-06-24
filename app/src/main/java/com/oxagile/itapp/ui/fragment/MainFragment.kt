@@ -13,11 +13,14 @@ import com.oxagile.itapp.R
 import com.oxagile.itapp.network.NetworkFactory
 import com.oxagile.itapp.endless.EndlessService
 import com.oxagile.itapp.utils.DeviceUtil
+import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.fragment_main.*
+
+const val PREFS_URL_KEY = "url"
 
 class MainFragment : Fragment() {
 
-    private val apiList = mutableListOf<Any?>(
+    private val apiList = mutableListOf(
         "http://192.168.1.231:3001/", "http://10.168.31.231:3001/", "http://123.168.31.231:3001/")
 
     override fun onCreateView(
@@ -46,8 +49,7 @@ class MainFragment : Fragment() {
             context.stopService(intent)
         }
 
-        val arrayAdapter =
-            ArrayAdapter<Any?>(context, android.R.layout.simple_dropdown_item_1line, apiList)
+        val arrayAdapter = ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, apiList)
         api_input.setAdapter(
             arrayAdapter
         )
@@ -55,7 +57,7 @@ class MainFragment : Fragment() {
         api_input.setText(NetworkFactory.BASE_URL)
         api_change.setOnClickListener {
             val apiUrl = api_input.text
-            NetworkFactory.BASE_URL = apiUrl.toString()
+            Prefs.putString(PREFS_URL_KEY, apiUrl.toString())
             Toast.makeText(context, "Api URL was changed to $apiUrl", Toast.LENGTH_SHORT).show()
         }
         api_add.setOnClickListener {
