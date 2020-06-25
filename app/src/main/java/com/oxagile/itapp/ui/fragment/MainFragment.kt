@@ -17,6 +17,8 @@ import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.fragment_main.*
 
 const val PREFS_URL_KEY = "url"
+const val PREFS_PERIOD_KEY = "period"
+const val PERIOD_DEFAULT = 10
 
 class MainFragment : Fragment() {
 
@@ -40,6 +42,7 @@ class MainFragment : Fragment() {
         }
 
         version_code.text = "Version code: ${BuildConfig.VERSION_CODE}"
+        text_edit_period.setText(Prefs.getInt(PREFS_PERIOD_KEY, PERIOD_DEFAULT).toString())
 
         start.setOnClickListener {
             context.startService(Intent(context, EndlessService::class.java))
@@ -66,6 +69,11 @@ class MainFragment : Fragment() {
             arrayAdapter.add(apiUrl)
             arrayAdapter.notifyDataSetChanged()
             Toast.makeText(context, "Was added $apiUrl", Toast.LENGTH_SHORT).show()
+        }
+        button_change_period.setOnClickListener {
+            val period = text_edit_period.text.toString().toInt()
+            Prefs.putInt(PREFS_PERIOD_KEY, period)
+            Toast.makeText(context, "Set period: $period minutes", Toast.LENGTH_SHORT).show()
         }
     }
 

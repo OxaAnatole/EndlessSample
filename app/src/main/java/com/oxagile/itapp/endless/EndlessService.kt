@@ -17,6 +17,9 @@ import com.oxagile.itapp.repository.Repository
 import com.oxagile.itapp.utils.UpdateUtils
 import com.oxagile.itapp.network.Result
 import com.oxagile.itapp.network.NetworkFactory
+import com.oxagile.itapp.ui.fragment.PERIOD_DEFAULT
+import com.oxagile.itapp.ui.fragment.PREFS_PERIOD_KEY
+import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -98,7 +101,6 @@ class EndlessService : Service() {
 
         private val scope = repository.scope
         private val file: File = File(context.getExternalFilesDir(null)!!, NetworkFactory.INSTALLING_FILE)
-        private val period = TimeUnit.MINUTES.toMillis(10) //TODO
         private val receiver = DownloadCompleteReceiver { update() }
         private val handler = Handler()
         private val runnable = object : Runnable {
@@ -109,6 +111,7 @@ class EndlessService : Service() {
                     }
                     receiver.downloadId = UpdateUtils.download(context, file, NetworkFactory.getDownloadingUrl())
                 }
+                val period = TimeUnit.MINUTES.toMillis(Prefs.getInt(PREFS_PERIOD_KEY, PERIOD_DEFAULT).toLong())
                 handler.postDelayed(this, period)
             }
         }
