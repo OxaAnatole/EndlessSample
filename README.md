@@ -20,8 +20,8 @@ adb install -r -t app.apk
 Where "app.apk" is name of APK-file of the app.<br>
 
 2. Set app as device owner (Important condition: on device must have no any account).
-```shell
- adb shell dpm set-device-owner com.oxagile.itapp/.receiver.DevAdminReceiver
+```
+adb shell dpm set-device-owner com.oxagile.itapp/.receiver.DevAdminReceiver
 ```
 >For Android 7.0 and higher you also need to set the `testOnly` flag in AndroidManifest.xml (note for Android Developer)
 <br>

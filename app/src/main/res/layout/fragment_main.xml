@@ -8,20 +8,12 @@
     tools:context=".ui.fragment.MainFragment">
 
     <Button
-        android:id="@+id/api_change"
+        android:id="@+id/api_set"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Change"
+        android:layout_marginTop="16dp"
+        android:text="Set"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-    <Button
-        android:id="@+id/api_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Add"
-        app:layout_constraintTop_toBottomOf="@id/api_change"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <AutoCompleteTextView
@@ -34,29 +26,18 @@
         android:hint="@string/lbl_backend"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/api_change"/>
+        app:layout_constraintEnd_toStartOf="@id/api_set"/>
 
     <Button
-        android:id="@+id/start"
+        android:id="@+id/serviceBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
+        android:enabled="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/api_input"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <Button
-        android:id="@+id/stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Stop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/start"
-        app:layout_constraintVertical_bias="0.068" />
 
     <TextView
         android:id="@+id/device_info"
@@ -66,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stop" />
+        app:layout_constraintTop_toBottomOf="@id/serviceBtn" />
 
     <TextView
         android:id="@+id/version_code"
@@ -99,7 +80,7 @@
         android:layout_marginTop="8dp"
         android:text="Period of app version checking in minutes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/api_add" />
+        app:layout_constraintTop_toBottomOf="@+id/api_set" />
 
     <Button
         android:id="@+id/button_change_period"

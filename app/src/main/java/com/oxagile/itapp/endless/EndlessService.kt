@@ -5,9 +5,7 @@ import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
-import android.os.Handler
-import android.os.IBinder
+import android.os.*
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.oxagile.itapp.ui.activity.MainActivity
@@ -36,21 +34,24 @@ class EndlessService : Service() {
         }
     }
     private lateinit var updateHelper: UpdateHelper
+    private val binder = ServiceBinder()
 
     override fun onBind(intent: Intent): IBinder? {
-        return null
+        return binder
     }
 
     override fun onDestroy() {
         super.onDestroy()
         updateHelper.stop()
         handler.removeCallbacks(runnableCode)
+        binder.serviceStarted = false
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         updateHelper = UpdateHelper(applicationContext, repository)
         updateHelper.start()
         startForeground()
+        binder.serviceStarted = true
         return START_STICKY
     }
 
@@ -66,7 +67,7 @@ class EndlessService : Service() {
         )
         val notification =
             NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Endless service")
+                .setContentTitle("IT Oxagile app")
                 .setContentText("Running...")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(contentIntent)
@@ -76,13 +77,11 @@ class EndlessService : Service() {
     }
 
     private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel =
-                NotificationChannel(CHANNEL_ID, "HEARTBEAT", importance)
-            channel.description = "CHANEL DESCRIPTION"
+                NotificationChannel(CHANNEL_ID, "Oxagile IT service", importance)
+            channel.description = "The channel is used for the service"
             val notificationManager = getSystemService(
                 NotificationManager::class.java
             )
@@ -100,7 +99,7 @@ class EndlessService : Service() {
     ) {
 
         private val scope = repository.scope
-        private val file: File = File(context.getExternalFilesDir(null)!!, NetworkFactory.INSTALLING_FILE)
+        private val file: File = File(context.getExternalFilesDir(null)!!, "app.apk")
         private val receiver = DownloadCompleteReceiver { update() }
         private val handler = Handler()
         private val runnable = object : Runnable {
@@ -135,7 +134,7 @@ class EndlessService : Service() {
                 if (dpm.isDeviceOwnerApp(context.packageName)) {
                     Log.d(TAG, "The app is device owner")
                     UpdateUtils.update(context, context.packageName, file.path)
-                } else Log.d(TAG, "The app is not device owner")
+                } else Log.e(TAG, "The app is not device owner")
             } catch (e: Exception) {
                 Log.e(TAG, "Cannot update the app", e)
             }
@@ -157,10 +156,12 @@ class EndlessService : Service() {
 
     }
 
+    inner class ServiceBinder: Binder() {
+        var serviceStarted = false
+    }
+
     companion object {
-        const val STOP = "stop_service"
         private const val SERVICE_NOTIFICATION_ID = 12345
-        private const val CHANNEL_ID = "ENDLESS"
-        private const val REPEAT_INTERVAL: Long = 2000
+        private const val CHANNEL_ID = "OXAGILE"
     }
 }

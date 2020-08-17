@@ -3,6 +3,7 @@ package com.oxagile.itapp.ui.activity
 import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -67,16 +68,23 @@ class MainActivity : AppCompatActivity(), LoginFragment.LoginActionListener {
     }
 
     private fun hideKeyboard() {
-        val imm: InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        var view: View? = currentFocus
-        if (view == null) {
-            view = this as View
+        Log.d(TAG, "hideKeyboard")
+        try {
+            val imm: InputMethodManager =
+                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            var view: View? = currentFocus
+            if (view == null) {
+                view = this as View
+            }
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        } catch (e: ClassCastException) {
+            Log.e(TAG, "hideKeyboard", e)
         }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     companion object {
         private const val ENTERED_KEY = "entered"
+        private val TAG = MainActivity::class.java.simpleName
     }
 
 }

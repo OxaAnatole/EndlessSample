@@ -14,9 +14,11 @@ interface NetworkService {
     @POST("devices/inform")
     fun sendDeviceData(@Body device: Device): Call<Device>
 
+    @Headers("Accept: */*")
     @POST("devices/verify-password")
     suspend fun checkPassword(@Body password: PasswordRequest): String
 
+    @Headers("Accept: */*")
     @GET("devices/require-update")
     suspend fun requireUpdate(): String
 

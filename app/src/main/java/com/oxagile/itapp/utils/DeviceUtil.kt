@@ -6,8 +6,8 @@ import android.os.Build
 import android.provider.Settings
 import com.oxagile.itapp.model.Device
 
-
 object DeviceUtil {
+
     fun generateDeviceInfo(context: Context, result: (Device) -> Unit) {
         result.invoke(
             Device(
