@@ -9,7 +9,7 @@ import android.util.Log
  * Copyright (c) 2018 by Roman Sisik. All rights reserved.
  */
 class DevAdminReceiver: DeviceAdminReceiver() {
-    override fun onEnabled(context: Context?, intent: Intent?) {
+    override fun onEnabled(context: Context, intent: Intent) {
         super.onEnabled(context, intent)
         Log.d("DevAdminReceiver", "Device Owner Enabled")
     }

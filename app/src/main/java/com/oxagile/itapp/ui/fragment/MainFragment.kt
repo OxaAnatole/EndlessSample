@@ -114,7 +114,7 @@ class MainFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        if (binder!!.serviceStarted) {
+        if (binder != null && binder!!.serviceStarted) {
             requireContext().unbindService(connection)
         }
     }
