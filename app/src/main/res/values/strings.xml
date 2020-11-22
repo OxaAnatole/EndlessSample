@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Oxagile IT app</string>
     <string name="lbl_backend">Backend address</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="set">Set</string>
 </resources>

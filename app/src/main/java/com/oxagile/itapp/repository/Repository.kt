@@ -16,7 +16,7 @@ import java.lang.IllegalStateException
 import kotlin.coroutines.resume
 
 class Repository {
-    private val TAG = "DeviceRepository"
+    private val TAG = Repository::class.java.simpleName
     private var parentJob = Job()
     // By default all the coroutines launched in this scope should be using the Main dispatcher
     private val coroutineContext: CoroutineContext
@@ -37,13 +37,13 @@ class Repository {
     }
 
     suspend fun checkPassword(password: String): Result<Boolean> {
-        return try {
+        return Result.Success(true) /*todo try {
             val request = PasswordRequest(DevicePassword(password))
             val answer = NetworkFactory.apiService().checkPassword(request)
             processAnswer(answer)
         } catch (e: Exception) {
             Result.Error(e)
-        }
+        }*/
     }
 
     suspend fun requireUpdate(): Result<Boolean> {

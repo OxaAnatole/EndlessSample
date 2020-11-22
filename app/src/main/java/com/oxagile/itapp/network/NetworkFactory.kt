@@ -2,7 +2,7 @@ package com.oxagile.itapp.network
 
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.oxagile.itapp.ItApp.Companion.networkFlipperPlugin
-import com.oxagile.itapp.vm.MainViewModel.Companion.PREFS_URL_KEY
+import com.oxagile.itapp.prefs.PrefsConstants.URL_KEY
 import com.pixplicity.easyprefs.library.Prefs
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object NetworkFactory {
 
     val BASE_URL: String
-        get() = Prefs.getString(PREFS_URL_KEY, "http://192.168.112.143:3001/")
+        get() = Prefs.getString(URL_KEY, "http://192.168.112.143:3001/")
 
     fun apiService(): NetworkService {
         val loggingInterceptor = HttpLoggingInterceptor()

@@ -12,17 +12,19 @@ import com.oxagile.itapp.ui.activity.MainActivity
 import com.oxagile.itapp.R
 import com.oxagile.itapp.receiver.DownloadCompleteReceiver
 import com.oxagile.itapp.repository.Repository
-import com.oxagile.itapp.utils.UpdateUtils
 import com.oxagile.itapp.network.Result
 import com.oxagile.itapp.network.NetworkFactory
-import com.oxagile.itapp.ui.fragment.PERIOD_DEFAULT
-import com.oxagile.itapp.ui.fragment.PREFS_PERIOD_KEY
+import com.oxagile.itapp.prefs.PrefsConstants.PERIOD_MINUTES_VALUE
+import com.oxagile.itapp.prefs.PrefsConstants.PERIOD_MINUTES_KEY
+import com.oxagile.itapp.utils.UpdateUtils.download
+import com.oxagile.itapp.utils.UpdateUtils.update
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+@Deprecated("WorkManager")
 class EndlessService : Service() {
 
     private val repository = Repository()
@@ -108,9 +110,9 @@ class EndlessService : Service() {
                     if (file.exists()) {
                         file.delete()
                     }
-                    receiver.downloadId = UpdateUtils.download(context, file, NetworkFactory.getDownloadingUrl())
+                    receiver.downloadId = context.download(file, NetworkFactory.getDownloadingUrl())
                 }
-                val period = TimeUnit.MINUTES.toMillis(Prefs.getInt(PREFS_PERIOD_KEY, PERIOD_DEFAULT).toLong())
+                val period = TimeUnit.MINUTES.toMillis(Prefs.getInt(PERIOD_MINUTES_KEY, PERIOD_MINUTES_VALUE).toLong())
                 handler.postDelayed(this, period)
             }
         }
@@ -133,7 +135,7 @@ class EndlessService : Service() {
                 val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
                 if (dpm.isDeviceOwnerApp(context.packageName)) {
                     Log.d(TAG, "The app is device owner")
-                    UpdateUtils.update(context, context.packageName, file.path)
+                    context.update(context.packageName, file.path)
                 } else Log.e(TAG, "The app is not device owner")
             } catch (e: Exception) {
                 Log.e(TAG, "Cannot update the app", e)

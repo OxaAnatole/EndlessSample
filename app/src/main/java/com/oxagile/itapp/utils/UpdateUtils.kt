@@ -12,7 +12,7 @@ import java.io.File
 
 object UpdateUtils {
 
-    fun download(context: Context, dir: File, url: String): Long {
+    fun Context.download(dir: File, url: String): Long {
         val request =
             DownloadManager.Request(Uri.parse(url))
                 .setTitle("Oxagile IT app updating") // Title of the Download Notification
@@ -25,15 +25,15 @@ object UpdateUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             request.setRequiresCharging(false) // Set if charging is required to begin the download
         }
-        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         return downloadManager.enqueue(request)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @Throws(Exception::class)
-    fun update(context: Context, packageName: String, path: String) {
+    fun Context.update(packageName: String, path: String) {
         // PackageManager provides an instance of PackageInstaller
-        val packageInstaller = context.packageManager.packageInstaller
+        val packageInstaller = packageManager.packageInstaller
         // Prepare params for installing one APK file with MODE_FULL_INSTALL
         // We could use MODE_INHERIT_EXISTING to install multiple split APKs
         val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
@@ -49,9 +49,13 @@ object UpdateUtils {
         out.close()
         // The app gets killed after installation session commit
         session.commit(
-            PendingIntent.getBroadcast(context, sessionId, Intent("android.intent.action.MAIN"), 0)
+            PendingIntent.getBroadcast(this, sessionId, Intent("android.intent.action.MAIN"), 0)
                 .intentSender
         )
+    }
+
+    fun Context.getFile(fileName: String): File {
+        return File(getExternalFilesDir(null) ?: filesDir, fileName)
     }
 
 }
